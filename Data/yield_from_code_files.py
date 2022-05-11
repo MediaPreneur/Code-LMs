@@ -19,8 +19,7 @@ def yield_from_files(dir, semaphore):
         return doc
 
     def yielder(fname, semaphore):
-        f = read(fname)
-        if f:
+        if f := read(fname):
             semaphore.acquire()
             yield f
 

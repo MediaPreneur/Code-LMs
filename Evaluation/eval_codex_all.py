@@ -56,10 +56,10 @@ if __name__ == '__main__':
     parser.add_argument('--save-probs', type=str, required=False, default=None)
     parser.add_argument('--output', type=str, required=False, default=os.devnull)
     args = parser.parse_args()
-    
+
     results = {}
     dirs = glob.glob(os.path.join(args.dirs, '*'), recursive=False)
-    excluded_dirs = args.dirs + '-excluded'
+    excluded_dirs = f'{args.dirs}-excluded'
     pathlib.Path(excluded_dirs).mkdir(parents=True, exist_ok=True)
     for language in dirs:
         if language.split('/')[-1] not in languages_to_run:
@@ -67,7 +67,7 @@ if __name__ == '__main__':
         print('Language:', language)
         files = glob.glob(os.path.join(language, '**/*'), recursive=True)
         files = [f for f in files if os.path.isfile(f)]
-            
+
         log_probs_sum = 0
         tokens_count = 0
         ignored_files = []
@@ -93,12 +93,12 @@ if __name__ == '__main__':
                 tokens_count += logprobs_count
                 # OpenAI limits the request rate to 20/min
                 time.sleep(10)
-        
+
         print(f'\n\n\nlogprobs sum: {log_probs_sum}')
         print(f'total tokens: {tokens_count}')
         print(f'Average loss: {-log_probs_sum / tokens_count}')
         print(f'Perplexity: {ppl(log_probs_sum / tokens_count)}')
-        print(f'Ignored files:')
+        print('Ignored files:')
         for f in ignored_files:
             print(f'\t{f}')
             new_location = os.path.join(excluded_dirs, os.path.dirname(f))

@@ -18,10 +18,10 @@ def main():
 	language = sys.argv[1]
 	proj_dir = sys.argv[2]
 	out_dir = sys.argv[3]
-	
+
 	# Use Pygments to get language extensions.
 	lexer = get_lexer_by_name(language)
-	language_extensions = set(ext.lower()[1:] for ext in lexer.filenames)
+	language_extensions = {ext.lower()[1:] for ext in lexer.filenames}
 
 	print(f'Processing: {proj_dir}')
 	if not os.path.exists(out_dir):
